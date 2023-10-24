@@ -1,14 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pretest_mdi_pai/data/list_user.dart' as listUser;
 import 'package:pretest_mdi_pai/data/user_list.dart';
 import 'package:pretest_mdi_pai/pages/detail_page.dart';
 import 'package:pretest_mdi_pai/pages/login_page.dart';
 import 'package:pretest_mdi_pai/service/user_preferences.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../api/api.dart';
-import '../data/user.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -38,7 +35,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blue,
         title: Row(
           children: [
             Expanded(
@@ -51,6 +48,7 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.grey.withOpacity(0.2),
                   child: Center(
                     child: TextField(
+                      cursorColor: Colors.white,
                       controller: queryController,
                       // menampilkan data search
                       onChanged: (query) {
@@ -69,7 +67,7 @@ class _HomePageState extends State<HomePage> {
                         });
                       },
                       decoration: const InputDecoration(
-                        hintText: 'Search...',
+                        hintText: 'Search',
                         hintStyle: TextStyle(color: Colors.black),
                         prefixIcon: Icon(
                           Icons.search_outlined,
@@ -81,86 +79,83 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            SizedBox(
-              width: 36,
-              child: IconButton(
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return Dialog(
-                          child: Container(
-                            width: 200,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 48,
-                              vertical: 24,
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Text(
-                                  "Masukan Limit Data:",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  ),
+            IconButton(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Dialog(
+                        child: Container(
+                          width: 200,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 48,
+                            vertical: 24,
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Text(
+                                "Masukan Limit Data:",
+                                style: TextStyle(
+                                  fontSize: 16,
                                 ),
-                                TextField(
-                                  // controller limit data
-                                  controller: limitController,
-                                  textAlign: TextAlign.center,
-                                  keyboardType: TextInputType.number,
-                                ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    height: 40,
-                                    child: MaterialButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          // menampilkan seluruh data
-                                          if (limitController.text.isEmpty) {
-                                            final query = queryController.text;
-                                            _users = Api().searchUser(query: query);
-                                          } else {
-                                            // menampilkan data yang dilimit
-                                            final limit = limitController == ""
-                                                ? 100
-                                                : int.parse(limitController.text);
-                                            _users = Api().searchUser(
-                                                query: queryController.text,
-                                                limit: limit);
-                                          }
-                                        });
+                              ),
+                              TextField(
+                                // controller limit data
+                                controller: limitController,
+                                textAlign: TextAlign.center,
+                                keyboardType: TextInputType.number,
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  height: 40,
+                                  child: MaterialButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        // menampilkan seluruh data
+                                        if (limitController.text.isEmpty) {
+                                          final query = queryController.text;
+                                          _users = Api().searchUser(query: query);
+                                        } else {
+                                          // menampilkan data yang dilimit
+                                          final limit = limitController == ""
+                                              ? 100
+                                              : int.parse(limitController.text);
+                                          _users = Api().searchUser(
+                                              query: queryController.text,
+                                              limit: limit);
+                                        }
+                                      });
 
-                                        print(limitController.text);
-                                        Navigator.pop(context);
-                                      },
-                                      color: Colors.blue,
-                                      child: Text(
-                                        "Submit",
-                                        style: GoogleFonts.poppins(
+                                      print(limitController.text);
+                                      Navigator.pop(context);
+                                    },
+                                    color: Colors.blue,
+                                    child: Text(
+                                      "Submit",
+                                      style: GoogleFonts.poppins(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w600,
                                       ),
-                                      ),
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
+                                ),
+                              )
+                            ],
                           ),
-                        );
-                      });
-                },
-                icon: const Icon(
-                  Icons.filter_list,
-                  size: 30,
-                  color: Colors.black,
-                ),
+                        ),
+                      );
+                    });
+              },
+              icon: const Icon(
+                Icons.filter_list,
+                size: 30,
+                color: Colors.black,
               ),
             ),
             SizedBox(
@@ -236,13 +231,14 @@ class _HomePageState extends State<HomePage> {
                   },
                   icon: const Icon(
                     Icons.logout,
-                    color: Colors.red,
-                    size: 30,
+                    color: Colors.black,
+                    size: 25,
                   )),
             )
           ],
         ),
       ),
+
       body: SafeArea(
         child: FutureBuilder(
           future: _users,
@@ -253,7 +249,7 @@ class _HomePageState extends State<HomePage> {
               );
             } else if (snapshot.hasData) {
               return Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(8.0),
                 child: ListView.builder(
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
@@ -267,18 +263,32 @@ class _HomePageState extends State<HomePage> {
                             ),
                           );
                         },
-                        child: Card(
-                          child: Row(
-                            children: [
-                              ClipRRect(
+                        child: Column(
+                          children: [
+                            ListTile(
+                              title: Text(
+                                    "${data.firstName} ${data.lastName}",
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                              subtitle: Text(
+                                            data.email,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                              leading: ClipRRect(
                                 borderRadius: BorderRadius.circular(4),
                                 child: Container(
                                   decoration: const BoxDecoration(
                                     shape: BoxShape.rectangle,
                                     color: Colors.blue,
                                   ),
-                                  height: 64,
-                                  width: 64,
+                                  height: 70,
+                                  width: 70,
                                   child: Image.network(
                                     data.image,
                                     filterQuality: FilterQuality.high,
@@ -286,34 +296,18 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
-                              const SizedBox(
-                                width: 16,
-                              ),
-                              SizedBox(
-                                width: 300,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "${data.firstName} ${data.lastName}",
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    Text(
-                                      data.university!,
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
+                              trailing: Text(
+                                data.username,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.poppins(
+                                  fontSize: 12,
                                 ),
                               ),
-                            ],
-                          ),
+                              ),
+                          ]
+
                         ),
+
                       );
                     }),
               );
@@ -323,7 +317,7 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       ),
+
     );
   }
 }
-

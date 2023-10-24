@@ -113,9 +113,11 @@ class _LoginPageState extends State<LoginPage> {
                 height: 100,
               ),
               Container(
-                child: const Text(
-                  'Login',
-                  style: TextStyle(fontSize: 34, fontWeight: FontWeight.w700),
+                child: Center(
+                  child: const Text(
+                    'Login',
+                    style: TextStyle(fontSize: 34, fontWeight: FontWeight.w700),
+                  ),
                 ),
               ),
               const SizedBox(
@@ -161,7 +163,8 @@ class _LoginPageState extends State<LoginPage> {
                       child:  Text("Login",
                       style: GoogleFonts.poppins(
                         color: Colors.white,
-                        fontWeight: FontWeight.w700
+                        fontWeight: FontWeight.w700,
+                        fontSize: 20,
                       ),),
                     ),
                   ),
@@ -170,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
                 const Column(
                   children: [
                     Center(
-                      child: CircularProgressIndicator(color: Colors.red),
+                      child: CircularProgressIndicator(color: Colors.blue),
                     ),
                     SizedBox(
                       height: 16,
